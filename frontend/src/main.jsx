@@ -6,12 +6,14 @@ import App from './App.jsx';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 
 //Google 拿到的 Client ID
-const clientId = '813366548080-o4makbs0usr5kq0hmdseqk388muq71s2.apps.googleusercontent.com';
+const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <BrowserRouter>
-      <App />
+      <GoogleOAuthProvider clientId={clientId}>
+        <App />
+      </GoogleOAuthProvider>
     </BrowserRouter>
   </StrictMode>
 );

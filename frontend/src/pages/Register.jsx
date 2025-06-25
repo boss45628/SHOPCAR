@@ -22,8 +22,8 @@ function Register() {
 
   return (
     <div className="max-w-md mx-auto bg-white p-6 rounded shadow mt-10">
-      <h2 className="text-2xl font-bold mb-4 text-purple-600">註冊帳號</h2>
-      
+      <h2 className="text-2xl font-bold mb-4 text-black-600">註冊帳號</h2>
+
       <label className="block mb-1">帳號</label>
       <input
         value={username}
@@ -43,7 +43,7 @@ function Register() {
 
       <button
         onClick={handleRegister}
-        className="w-full bg-purple-600 text-white py-2 rounded hover:bg-purple-700"
+        className="w-full bg-blue-500 text-white py-2 rounded hover:bg-purple-700"
       >
         註冊
       </button>
