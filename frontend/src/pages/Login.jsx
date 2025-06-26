@@ -1,10 +1,14 @@
 import { GoogleLogin } from '@react-oauth/google';
 import axios from 'axios';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Eye, EyeOff } from 'lucide-react';
 
 function Login() {
-  const [account, setAccount] = useState('');
+  const navigate = useNavigate();
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
 
   // Google 登入成功
   const handleGoogleSuccess = async (credentialResponse) => {
@@ -16,75 +20,107 @@ function Login() {
 
     console.log('✅ 拿到 Google Token', token);
     try {
-      const res = await axios.post('http://localhost:5000/api/google-login', {
-        token,
-      });
+      const res = await axios.post('http://localhost:5000/api/google-login', { token });
 
       if (res.data.success) {
         localStorage.setItem('token', res.data.token);
-        alert('登入成功！歡迎 ' + res.data.name);
+        window.dispatchEvent(new Event('storage')); // ← 加這行
+        navigate('/');
       } else {
         alert('登入失敗');
       }
     } catch (err) {
       console.error('錯誤:', err);
+      alert('登入失敗');
     }
   };
 
   // Google 登入失敗
   const handleGoogleError = () => {
     console.error('Google 登入失敗');
+    alert('Google 登入失敗，請稍後再試');
   };
 
   // 一般帳密登入
   const handleNormalLogin = async () => {
-    if (!account || !password) {
+    if (!username || !password) {
       alert('請輸入帳號與密碼');
       return;
     }
 
     try {
       const res = await axios.post('http://localhost:5000/api/login', {
-        account,
+        username,
         password,
       });
 
-      if (res.data.success) {
-        localStorage.setItem('token', res.data.token);
-        alert('登入成功！歡迎 ' + res.data.name);
+      const token = res.data.token;
+      if (token) {
+        localStorage.setItem('token', token);
+        window.dispatchEvent(new Event('storage')); // ← 加這行
+        navigate('/');
+        alert('登入成功');
       } else {
         alert('帳號或密碼錯誤');
       }
     } catch (err) {
-      console.error('登入失敗:', err);
+      alert('登入失敗');
+      console.error(err);
     }
+  };
+
+  // 前往註冊頁面
+  const gotoRegister = () => {
+    navigate('/Register');
   };
 
   return (
     <div className="max-w-md mx-auto bg-white p-6 rounded shadow mt-10">
-      <h2 className="text-2xl font-bold mb-4 text-black-600">登入</h2>
+      <h2 className="text-3xl font-bold mb-4 text-gray-700">登入</h2>
 
       <label className="block mb-1">帳號</label>
       <input
         className="w-full border mb-4 p-2"
-        value={account}
-        onChange={(e) => setAccount(e.target.value)}
+        value={username}
+        onChange={(e) => setUsername(e.target.value)}
       />
 
       <label className="block mb-1">密碼</label>
-      <input
-        type="password"
-        className="w-full border mb-4 p-2"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
+      <div className="relative">
+        <input
+          type={showPassword ? 'text' : 'password'}
+          className="w-full border mb-4 p-2 pr-10"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        <button
+          type="button"
+          onClick={() => setShowPassword(!showPassword)}
+          className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-600"
+        >
+          {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+        </button>
+      </div>
 
-      <button className="w-full bg-blue-500 text-white py-2 rounded" onClick={handleNormalLogin}>
-        登入
+      <button
+        className="w-full font-bold bg-blue-500 text-white py-2 rounded hover:bg-blue-400 "
+        onClick={handleNormalLogin}
+      >
+        開始購物瞜
       </button>
 
       <div className="my-4">
         <GoogleLogin onSuccess={handleGoogleSuccess} onError={handleGoogleError} />
+      </div>
+
+      <div className="mt-12">
+        <h2 className="text-2xl font-bold mb-4 text-gray-700">還不是會員嗎？</h2>
+        <button
+          className="w-full font-bold border border-blue-500 text-blue-500 bg-white py-2 rounded hover:bg-blue-100"
+          onClick={gotoRegister}
+        >
+          加入會員
+        </button>
       </div>
     </div>
   );
