@@ -45,7 +45,7 @@ function Login() {
       return;
     }
 
-    console.log('✅ 拿到 Google Token', token);
+    console.log('✅ 拿到 Google token');
     try {
       const res = await axios.post('http://localhost:5000/api/google-login', { token });
 
@@ -138,7 +138,15 @@ function Login() {
       </button>
 
       <div className="my-4">
-        <GoogleLogin onSuccess={handleGoogleSuccess} onError={handleGoogleError} />
+        <GoogleLogin
+          onSuccess={handleGoogleSuccess}
+          onError={handleGoogleError}
+          useOneTap={false}
+          shape="rectangular"
+          theme="outline"
+          text="continue_with"
+          size="large"
+        />
       </div>
 
       <div className="mt-12">
