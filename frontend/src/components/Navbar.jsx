@@ -37,6 +37,12 @@ function Navbar() {
     googleLogout();
     localStorage.removeItem('token');
     window.dispatchEvent(new Event('storage'));
+
+    // 關掉 Google 自動選帳號
+    if (window.google?.accounts?.id) {
+      window.google.accounts.id.disableAutoSelect();
+    }
+
     navigate('/login');
   };
 

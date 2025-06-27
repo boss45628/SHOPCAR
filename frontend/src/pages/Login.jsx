@@ -4,12 +4,20 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Eye, EyeOff } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { useEffect } from 'react';
 
 function Login() {
   const navigate = useNavigate();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+
+  //每次登入時都要清除google快取
+  useEffect(() => {
+    if (window.google?.accounts?.id) {
+      window.google.accounts.id.disableAutoSelect();
+    }
+  }, []);
 
   // Google 登入成功
   const handleGoogleSuccess = async (credentialResponse) => {
