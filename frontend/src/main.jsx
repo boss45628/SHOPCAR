@@ -9,7 +9,7 @@ import { Toaster } from 'react-hot-toast'; //跳出提示訊息
 
 //Google 拿到的 Client ID
 const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
-
+console.log('✅ GOOGLE_CLIENT_ID:', import.meta.env.VITE_GOOGLE_CLIENT_ID);
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <BrowserRouter>

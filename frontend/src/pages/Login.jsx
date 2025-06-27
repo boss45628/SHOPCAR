@@ -29,7 +29,7 @@ function Login() {
         toast.success('登入成功');
         navigate('/');
       } else {
-        toast.success('登入失敗');
+        toast.error('登入失敗');
       }
     } catch (err) {
       console.error('錯誤:', err);
@@ -40,13 +40,13 @@ function Login() {
   // Google 登入失敗
   const handleGoogleError = () => {
     console.error('Google 登入失敗');
-    toast.success('Google 登入失敗，請稍後再試');
+    toast.error('Google 登入失敗，請稍後再試');
   };
 
   // 一般帳密登入
   const handleNormalLogin = async () => {
     if (!username || !password) {
-      toast.success('請輸入帳號與密碼');
+      toast.error('請輸入帳號與密碼');
       return;
     }
 
@@ -63,7 +63,7 @@ function Login() {
         navigate('/');
         toast.success('登入成功');
       } else {
-        toast.success('帳號或密碼錯誤');
+        toast.error('帳號或密碼錯誤');
       }
     } catch (err) {
       alert('登入失敗');
@@ -98,7 +98,7 @@ function Login() {
         <button
           type="button"
           onClick={() => setShowPassword(!showPassword)}
-          className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-600"
+          className="absolute right-2 top-1/3 transform -translate-y-1/2 text-gray-600"
         >
           {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
         </button>

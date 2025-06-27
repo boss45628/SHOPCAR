@@ -1,6 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { useCart } from '../contexts/CartContext'; //加入購物車來顯示筆數
+import { googleLogout } from '@react-oauth/google';
 
 function Navbar() {
   const navigate = useNavigate();
@@ -33,8 +34,9 @@ function Navbar() {
 
   // 登出邏輯
   const handleLogout = () => {
+    googleLogout();
     localStorage.removeItem('token');
-    setIsLogin(false);
+    window.dispatchEvent(new Event('storage'));
     navigate('/login');
   };
 
