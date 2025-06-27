@@ -17,13 +17,31 @@ function Login() {
     if (window.google?.accounts?.id) {
       window.google.accounts.id.disableAutoSelect();
     }
+    if (isGoogleLogin()) {
+      console.log('✅ 目前是 Google 登入！');
+    } else {
+      console.log('✅ 目前是一般會員登入！');
+    }
   }, []);
+
+  function isGoogleLogin() {
+    const token = localStorage.getItem('token');
+    if (!token) return false;
+
+    // 若你的 Google token 是自訂字串
+    if (token.startsWith('mocked-jwt-token-for')) {
+      return true;
+    }
+
+    // 若未來都改用 JWT，也可以在此解析 payload 判斷
+    return false;
+  }
 
   // Google 登入成功
   const handleGoogleSuccess = async (credentialResponse) => {
     const token = credentialResponse.credential;
     if (!token) {
-      console.error('⚠️ 沒有拿到 Google Token，登入失敗');
+      toast.error('⚠️ 沒有拿到 Google Token，登入失敗');
       return;
     }
 
