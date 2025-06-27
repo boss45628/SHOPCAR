@@ -8,17 +8,19 @@ export const useCart = () => useContext(CartContext);
 
 //讓所有子元件可以使用購物車功能
 export const CartProvider = ({ children }) => {
-  //建立購物車的資料狀態
+  //建立購物車 存放購物車內容的地方
   const [cartItems, setCartItems] = useState([]);
   //加入商品到購物車
   const addToCart = (product) => {
     setCartItems((prev) => {
       const exists = prev.find((item) => item.id === product.id);
+      //如果有商品就+1
       if (exists) {
         return prev.map((item) =>
           item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
         );
       }
+      //沒有的話預設1
       return [...prev, { ...product, quantity: 1 }];
     });
   };
