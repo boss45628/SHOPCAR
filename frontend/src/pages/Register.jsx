@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
 
 function Register() {
   const [username, setUsername] = useState('');
@@ -13,7 +14,7 @@ function Register() {
         username,
         password,
       });
-      alert('註冊成功，請前往登入');
+      toast.success('註冊成功，請前往登入');
       navigate('/login');
     } catch (err) {
       alert(err.response?.data?.message || '註冊失敗');

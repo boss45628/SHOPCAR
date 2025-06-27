@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Eye, EyeOff } from 'lucide-react';
+import toast from 'react-hot-toast';
 
 function Login() {
   const navigate = useNavigate();
@@ -25,9 +26,10 @@ function Login() {
       if (res.data.success) {
         localStorage.setItem('token', res.data.token);
         window.dispatchEvent(new Event('storage')); // ← 加這行
+        toast.success('登入成功');
         navigate('/');
       } else {
-        alert('登入失敗');
+        toast.success('登入失敗');
       }
     } catch (err) {
       console.error('錯誤:', err);
@@ -38,13 +40,13 @@ function Login() {
   // Google 登入失敗
   const handleGoogleError = () => {
     console.error('Google 登入失敗');
-    alert('Google 登入失敗，請稍後再試');
+    toast.success('Google 登入失敗，請稍後再試');
   };
 
   // 一般帳密登入
   const handleNormalLogin = async () => {
     if (!username || !password) {
-      alert('請輸入帳號與密碼');
+      toast.success('請輸入帳號與密碼');
       return;
     }
 
@@ -59,9 +61,9 @@ function Login() {
         localStorage.setItem('token', token);
         window.dispatchEvent(new Event('storage')); // ← 加這行
         navigate('/');
-        alert('登入成功');
+        toast.success('登入成功');
       } else {
-        alert('帳號或密碼錯誤');
+        toast.success('帳號或密碼錯誤');
       }
     } catch (err) {
       alert('登入失敗');

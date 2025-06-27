@@ -1,9 +1,14 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import { useCart } from '../contexts/CartContext'; //加入購物車來顯示筆數
 
 function Navbar() {
   const navigate = useNavigate();
   const [isLogin, setIsLogin] = useState(false);
+  //取得購物車數量
+  const { cartItems } = useCart();
+
+  const totalQuantity = cartItems.reduce((sum, item) => sum + item.quantity, 0);
 
   // 每次渲染時都檢查是否有 token
   useEffect(() => {
@@ -43,9 +48,15 @@ function Navbar() {
           <Link to="/" className="font-bold text-gray-700 hover:text-purple-600">
             首頁
           </Link>
-          <Link to="/cart" className="font-bold text-gray-700 hover:text-purple-600">
-            購物車
+          <Link to="/cart" className="relative font-bold text-gray-700 hover:text-purple-600">
+            🛒 購物車
+            {totalQuantity > 0 && (
+              <span className="absolute -top-2 -right-4 bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">
+                {totalQuantity}
+              </span>
+            )}
           </Link>
+
           {isLogin ? (
             <button
               onClick={handleLogout}

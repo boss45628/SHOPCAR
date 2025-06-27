@@ -1,11 +1,12 @@
 import { useCart } from '../contexts/CartContext';
+import toast from 'react-hot-toast';
 
 function ProductCard({ id, name, price, image }) {
   const { addToCart } = useCart();
 
   const handleAdd = () => {
     addToCart({ id, name, price, image });
-    alert(`${name} 已加入購物車`);
+    toast.success(`${name} 已加入購物車`);
   };
 
   return (
