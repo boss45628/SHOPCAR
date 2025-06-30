@@ -10,7 +10,7 @@ function Register() {
 
   const handleRegister = async () => {
     try {
-      await axios.post('http://localhost:5000/api/register', {
+      await axios.post('https://shopcar-production.up.railway.app/api/register', {
         username,
         password,
       });

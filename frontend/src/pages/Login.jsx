@@ -47,7 +47,9 @@ function Login() {
 
     console.log('✅ 拿到 Google token');
     try {
-      const res = await axios.post('http://localhost:5000/api/google-login', { token });
+      const res = await axios.post('https://shopcar-production.up.railway.app/api/google-login', {
+        token,
+      });
 
       if (res.data.success) {
         localStorage.setItem('token', res.data.token);
@@ -77,7 +79,7 @@ function Login() {
     }
 
     try {
-      const res = await axios.post('http://localhost:5000/api/login', {
+      const res = await axios.post('https://shopcar-production.up.railway.app/api/login', {
         username,
         password,
       });
