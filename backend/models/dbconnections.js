@@ -1,4 +1,4 @@
-// backend/models/db.js
+// backend/models/dbconnections.js
 
 import mysql from "mysql2/promise";
 
