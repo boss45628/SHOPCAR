@@ -81,4 +81,16 @@ router.post("/google-login", async (req, res) => {
   }
 });
 
+//測試
+router.get("/testdb", async (req, res) => {
+  try {
+    const [rows] = await pool.query("SELECT 1");
+    console.log("DB connected OK!", rows);
+    res.json({ message: "DB connected", rows });
+  } catch (error) {
+    console.error("DB connection failed:", error);
+    res.status(500).json({ message: "DB connection error" });
+  }
+});
+
 export default router;
