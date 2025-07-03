@@ -79,10 +79,11 @@ function Login() {
     }
 
     try {
-      const res = await axios.post('https://shopcar-production.up.railway.app/api/login', {
+      const res = await axios.post(
+        'https://shopcar-production.up.railway.app/api/login',
         username,
-        password,
-      });
+        password
+      );
 
       const token = res.data.token;
       if (token) {
