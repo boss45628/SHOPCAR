@@ -4,16 +4,27 @@ import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 
 function Register() {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [formData, setFormData] = useState({
+    username: '', //帳號
+    password: '', //密碼
+    name: '', //姓名
+    email: '', //信箱
+    phone: '', //連絡電話
+  });
   const navigate = useNavigate();
+
+  //點擊事件
+  function handleChange(e) {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  }
 
   const handleRegister = async () => {
     try {
-      await axios.post('https://shopcar-production.up.railway.app/api/register', {
-        username,
-        password,
-      });
+      await axios.post('https://shopcar-production.up.railway.app/api/register', formData);
       toast.success('註冊成功，請前往登入');
       navigate('/login');
     } catch (err) {
@@ -27,19 +38,48 @@ function Register() {
 
       <label className="block mb-1">帳號</label>
       <input
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
+        name="username"
+        value={formData.username}
+        onChange={handleChange}
         className="w-full border border-gray-300 p-2 mb-4 rounded"
         placeholder="請輸入帳號"
       />
 
       <label className="block mb-1">密碼</label>
       <input
+        name="password"
         type="password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
+        value={formData.password}
+        onChange={handleChange}
         className="w-full border border-gray-300 p-2 mb-4 rounded"
         placeholder="請輸入密碼"
+      />
+
+      <label className="block mb-1">姓名</label>
+      <input
+        name="name"
+        value={formData.name}
+        onChange={handleChange}
+        className="w-full border border-gray-300 p-2 mb-4 rounded"
+        placeholder="請輸入姓名"
+      />
+
+      <label className="block mb-1">電子郵件</label>
+      <input
+        name="email"
+        value={formData.email}
+        onChange={handleChange}
+        className="w-full border border-gray-300 p-2 mb-4 rounded"
+        placeholder="請輸入電子郵件"
+      />
+
+      <label className="block mb-1">連絡電話</label>
+      <input
+        name="phone"
+        value={formData.phone}
+        onChange={handleChange}
+        className="w-full border border-gray-300 p-2 mb-4 rounded"
+        placeholder="請輸入連絡電話"
       />
 
       <button

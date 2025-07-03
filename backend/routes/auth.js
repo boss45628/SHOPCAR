@@ -2,29 +2,54 @@ import express from "express";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { OAuth2Client } from "google-auth-library";
+import pool from "./db.js";
 
 const router = express.Router();
 
-const users = []; // 暫存用戶
-
 router.post("/register", async (req, res) => {
-  const { username, password } = req.body;
-  const hash = await bcrypt.hash(password, 10); // 將密碼加密
-  users.push({ username, password: hash }); // 存入記憶體陣列中
-  res.json({ message: "註冊成功" }); // 傳訊息回前端
+  try {
+    const { username, password, name, email, phone } = req.body;
+
+    //加密密碼
+    const hash = await bcrypt.hash(password, 10);
+
+    await pool.query(
+      "INSERT INTO users (username, password, name, email, phone) VALUES (?, ?, ?, ?, ?)",
+      [username, hash, name, email, phone]
+    );
+
+    res.json({ message: "註冊成功" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "伺服器錯誤" });
+  }
 });
 
 router.post("/login", async (req, res) => {
   const { username, password } = req.body;
-  const user = users.find((u) => u.username === username);
-  if (!user) return res.status(400).json({ message: "帳號錯誤" });
 
+  // 從 MySQL 查找使用者
+  const [rows] = await pool.query("SELECT * FROM users WHERE username = ?", [
+    username,
+  ]);
+
+  if (rows.length === 0) {
+    return res.status(400).json({ message: "帳號錯誤" });
+  }
+
+  //找出資料庫的密碼
+  const user = rows[0];
+
+  // 比對密碼
   const valid = await bcrypt.compare(password, user.password);
-  if (!valid) return res.status(400).json({ message: "密碼錯誤" });
+  if (!valid) {
+    return res.status(400).json({ message: "密碼錯誤" });
+  }
   //加密
   const token = jwt.sign({ username }, process.env.JWT_SECRET, {
     expiresIn: "1h",
   });
+
   res.json({ token });
 });
 
