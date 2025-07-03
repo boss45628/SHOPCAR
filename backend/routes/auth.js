@@ -2,7 +2,7 @@ import express from "express";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { OAuth2Client } from "google-auth-library";
-import pool from "./dbconnections.js";
+import pool from "../models/dbconnections";
 
 const router = express.Router();
 
