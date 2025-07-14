@@ -79,11 +79,10 @@ function Login() {
     }
 
     try {
-      const res = await axios.post(
-        'https://shopcar-production.up.railway.app/api/login',
+      const res = await axios.post('https://shopcar-production.up.railway.app/api/login', {
         username,
-        password
-      );
+        password,
+      });
 
       const token = res.data.token;
       if (token) {
@@ -95,8 +94,8 @@ function Login() {
         toast.error('帳號或密碼錯誤');
       }
     } catch (err) {
-      alert('登入失敗');
       console.error(err);
+      toast.error(err.response?.data?.message || '登入失敗，請稍後再試');
     }
   };
 

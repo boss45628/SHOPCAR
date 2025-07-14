@@ -2,6 +2,8 @@ import { useCart } from '../contexts/CartContext';
 
 function Cart() {
   const { cartItems, removeFromCart, clearCart } = useCart();
+  //計算當前購物車總金額
+  const total = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
   return (
     <div className="max-w-4xl mx-auto mt-20 p-4">
@@ -28,6 +30,7 @@ function Cart() {
             </button>
           </li>
         ))}
+        <p className="mt-4 text-xl font-bold">總金額：${total}</p>
       </ul>
 
       {cartItems.length > 0 && (
